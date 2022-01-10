@@ -1,0 +1,32 @@
+
+do_it_as_root_with_autopassword()
+{
+	if [ -z "$1" ];then
+		echo "Please, input command"
+		exit 1
+	fi
+
+	if [ -z "$2" ];then
+		echo "Please, input root password"
+		exit 1
+	fi
+
+	expect -c "                        
+		set timeout 10             
+		spawn su root -c '$1'      
+		expect {                   
+			\"Password:\" {          
+				send '$2'  
+				interact   
+			}
+			\"password:\" {
+				send '$2'  
+				interact
+			}
+			\"암호:\" {
+				send '$2'  
+				interact   
+			}
+		}                          
+	"
+}
